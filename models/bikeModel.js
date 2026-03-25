@@ -1,0 +1,28 @@
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./database.db");
+
+// Create table if not exists
+db.run(`
+    CREATE TABLE IF NOT EXISTS bikes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT UNIQUE,
+        name TEXT,
+        phone TEXT,
+        email TEXT,
+        description TEXT
+    )
+`);
+
+module.exports = {
+    createBike: (data, callback) => {
+        db.run(
+            "INSERT INTO bikes (code, name, phone, email, description) VALUES (?, ?, ?, ?, ?)",
+            [data.code, data.name, data.phone, data.email, data.description],
+            callback
+        );
+    },
+
+    getBikeByCode: (code, callback) => {
+        db.get("SELECT * FROM bikes WHERE code = ?", [code], callback);
+    }
+};
