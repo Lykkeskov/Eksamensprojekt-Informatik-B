@@ -13,6 +13,12 @@ db.run(`
     )
 `);
 
+module.exports.getAllBikes = (callback) => {
+    db.all("SELECT * FROM bikes", [], (err, rows) => {
+        callback(err, rows);
+    });
+};
+
 module.exports = {
     createBike: (data, callback) => {
         db.run(
