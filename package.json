@@ -8,8 +8,14 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+<<<<<<< HEAD
     "express": "^4.19.2",
     "express-session": "^1.17.3",
     "sqlite3": "^5.1.6"
+=======
+    "express": "^4.22.1",
+    "express-session": "^1.17.3",
+    "sqlite3": "^6.0.1"
+>>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
   }
 }
