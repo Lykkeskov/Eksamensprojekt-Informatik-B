@@ -13,13 +13,9 @@ db.run(`
     )
 `);
 
-module.exports.getAllBikes = (callback) => {
-    db.all("SELECT * FROM bikes", [], (err, rows) => {
-        callback(err, rows);
-    });
-};
-
 module.exports = {
+
+    // Create reservation
     createBike: (data, callback) => {
         db.run(
             "INSERT INTO bikes (code, name, phone, email, description) VALUES (?, ?, ?, ?, ?)",
@@ -28,7 +24,15 @@ module.exports = {
         );
     },
 
+    // Get reservation by code
     getBikeByCode: (code, callback) => {
         db.get("SELECT * FROM bikes WHERE code = ?", [code], callback);
+    },
+
+    // NEW: Get all reservations
+    getAllBikes: (callback) => {
+        db.all("SELECT * FROM bikes", [], (err, rows) => {
+            callback(err, rows);
+        });
     }
 };

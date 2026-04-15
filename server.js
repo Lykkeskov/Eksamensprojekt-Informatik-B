@@ -1,28 +1,37 @@
 const express = require("express");
-const session = require("express-session");
 const path = require("path");
-
 const app = express();
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
-app.use(
-    session({
-        secret: "secret-key",
-        resave: false,
-        saveUninitialized: true,
-    })
-);
+app.use(express.json());
 
-// Routes
+const session = require("express-session");
+app.use(session({
+    secret: "password123",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
+
+app.use(express.static(path.join(__dirname, "public")));
+
+const bikesRoutes = require("./routes/bikes");
+const tasksRoutes = require("./routes/tasks");
+const inventoryRoutes = require("./routes/inventory");
+const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
-const bikeRoutes = require("./routes/bikes");
 
-app.use("/", authRoutes);
-app.use("/", bikeRoutes);
+app.use(authRoutes);       // LOGIN SKAL KOMME FØRST
+app.use(bikesRoutes);
+app.use(tasksRoutes);
+app.use(inventoryRoutes);
+app.use(usersRoutes);
 
-// Start server
-app.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
+app.get("/api/test", (req, res) => {
+    res.json({ message: "API virker!" });
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log("Server kører på port " + PORT);
 });

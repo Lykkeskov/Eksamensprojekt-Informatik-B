@@ -36,7 +36,7 @@ module.exports = {
         });
     },
 
-    // NEW: List all reservations
+    // List all reservations (HTML)
     list: (req, res) => {
         bikeModel.getAllBikes((err, bikes) => {
             if (err) return res.send("Error loading reservations");
@@ -72,6 +72,16 @@ module.exports = {
             `;
 
             res.send(html);
+        });
+    },
+
+    // ⭐ NEW: API endpoint – return all bikes as JSON
+    apiList: (req, res) => {
+        bikeModel.getAllBikes((err, bikes) => {
+            if (err) {
+                return res.status(500).json({ error: "Databasefejl" });
+            }
+            res.json(bikes);
         });
     }
 };
