@@ -2,55 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login – Cykelværkstedet</title>
+    <title>Login - Cykelværkstedet</title>
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        h2 {
+        font-family: Arial, sans-serif;
+        font-size: 22px;
+        font-weight: bold;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            display: block;
+        }
         body {
             font-family: Arial, sans-serif;
-            background: #f4f4f4;
+            background-image: url('/images/cykler.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            
         }
         .login-box {
-            background: white;
+            background: rgb(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 10px;    
             width: 300px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             text-align: center;
+
         }
         .login-box img {
             display: block;
             margin: 0 auto 20px;
             max-width: 100%;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #2a7ae2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #1f5fb8;
-        }
+            }
+            input {
+                background: rgba(255, 255, 255, 0.7);
+                border: 1px solid rgba(204, 204, 204, 0.6);
+                width: 100%;
+                padding: 10px;
+                margin: 8px 0;
+                border-radius: 5px;
+            }
+            button {
+                width: 100%;
+                padding: 10px;
+                background: rgb(42, 122, 226, 0.8);
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:hover {
+                background: rgb(31, 95, 184, 0.8);
+            }
     </style>
 </head>
 <body>
 
 <div class="login-box">
-    <h2>Login</h2>
-    <img src="/images/company-logo.jpg" alt="Company Logo">
+    <h2>CYKELVÆRKSTEDET</h2>
+    <img src="/images/logo-placeholder.png" alt="Company Logo">
     <form action="/login" method="POST">
         <input type="text" name="username" placeholder="Brugernavn" required>
         <input type="password" name="password" placeholder="Kodeord" required>
