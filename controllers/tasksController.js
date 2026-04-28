@@ -69,16 +69,29 @@ exports.htmlList = (req, res) => {
     });
 };
 
-// HTML: Create task
+// HTML: Create task (with input validation)
 exports.htmlCreate = (req, res) => {
     const { title, description, status } = req.body;
 
+    // Inputvalidering
+    if (!title || title.trim().length < 2) {
+        return res.send("Titel skal være mindst 2 tegn.");
+    }
+
+    if (!description || description.trim().length < 5) {
+        return res.send("Beskrivelse skal være mindst 5 tegn.");
+    }
+
+    const allowedStatuses = ["pending", "in_progress", "done"];
+    if (!allowedStatuses.includes(status)) {
+        return res.send("Ugyldig status.");
+    }
+
     db.run(
         "INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)",
-        [title, description, status || "pending"],
+        [title.trim(), description.trim(), status],
         function (err) {
             if (err) return res.send("Fejl ved oprettelse af opgave");
-
             res.redirect("/tasks");
         }
     );

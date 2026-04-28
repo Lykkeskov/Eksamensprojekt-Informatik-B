@@ -13,16 +13,35 @@ module.exports = {
         res.sendFile(path.resolve(__dirname, "../views/newBike.html"));
     },
 
-    // Create reservation
+    // Create reservation (with input validation)
     create: (req, res) => {
         const code = generateCode();
 
+        const { name, phone, email, description } = req.body;
+
+        // Input validation
+        if (!name || name.trim().length < 2) {
+            return res.send("Navn skal være mindst 2 tegn.");
+        }
+
+        if (!phone || !/^[0-9+\-\s]{6,15}$/.test(phone)) {
+            return res.send("Telefonnummer er ugyldigt.");
+        }
+
+        if (!email || !email.includes("@") || email.length < 5) {
+            return res.send("Email er ugyldig.");
+        }
+
+        if (!description || description.trim().length < 5) {
+            return res.send("Beskrivelse skal være mindst 5 tegn.");
+        }
+
         const data = {
             code,
-            name: req.body.name,
-            phone: req.body.phone,
-            email: req.body.email,
-            description: req.body.description
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            description: description.trim()
         };
 
         bikeModel.createBike(data, (err) => {
@@ -36,7 +55,7 @@ module.exports = {
         });
     },
 
-    // Search form
+    
     searchForm: (req, res) => {
         res.sendFile(path.resolve(__dirname, "../views/searchBike.html"));
     },
@@ -105,7 +124,7 @@ module.exports = {
         });
     },
 
-    // Delete reservation (HTML)
+    // Delete reservation
     delete: (req, res) => {
         const id = req.params.id;
 
