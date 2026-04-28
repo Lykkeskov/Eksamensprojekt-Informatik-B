@@ -8,7 +8,7 @@ exports.list = (req, res) => {
   });
 };
 
-// Hent én bruger
+// Hent en bruger
 exports.getOne = (req, res) => {
   const id = req.params.id;
 

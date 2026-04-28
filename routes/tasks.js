@@ -2,32 +2,17 @@ const express = require("express");
 const router = express.Router();
 const tasksController = require("../controllers/tasksController");
 
-// Tjek hvilke funktioner der findes i controlleren
-console.log("TasksController:", tasksController);
+// HTML routes
+router.get("/tasks", tasksController.htmlList);
+router.post("/tasks/new", tasksController.htmlCreate);
+router.post("/tasks/:id/done", tasksController.markDone);
+router.post("/tasks/:id/delete", tasksController.deleteHtml);
 
-// Brug kun funktioner der findes
-if (tasksController.list) {
-    router.get("/tasks", tasksController.list);
-}
-
-if (tasksController.getOne) {
-    router.get("/tasks/:id", tasksController.getOne);
-}
-
-if (tasksController.getByBike) {
-    router.get("/tasks/bike/:bikeId", tasksController.getByBike);
-}
-
-if (tasksController.create) {
-    router.post("/tasks", tasksController.create);
-}
-
-if (tasksController.update) {
-    router.put("/tasks/:id", tasksController.update);
-}
-
-if (tasksController.delete) {
-    router.delete("/tasks/:id", tasksController.delete);
-}
+// API routes
+router.get("/api/tasks", tasksController.list);
+router.get("/api/tasks/:id", tasksController.getOne);
+router.post("/api/tasks", tasksController.create);
+router.put("/api/tasks/:id", tasksController.update);
+router.delete("/api/tasks/:id", tasksController.delete);
 
 module.exports = router;
