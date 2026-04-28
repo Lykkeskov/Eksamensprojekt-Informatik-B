@@ -34,5 +34,10 @@ module.exports = {
         db.all("SELECT * FROM bikes", [], (err, rows) => {
             callback(err, rows);
         });
+    },
+
+    // ❗ NEW: Delete reservation by ID
+    deleteBike: (id, callback) => {
+        db.run("DELETE FROM bikes WHERE id = ?", [id], callback);
     }
 };

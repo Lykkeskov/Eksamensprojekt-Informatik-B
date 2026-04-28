@@ -74,6 +74,7 @@ module.exports = {
                         <th>Email</th>
                         <th>Beskrivelse</th>
                         <th>Kode</th>
+                        <th>Handlinger</th>
                     </tr>
             `;
 
@@ -85,6 +86,11 @@ module.exports = {
                         <td>${bike.email}</td>
                         <td>${bike.description}</td>
                         <td>${bike.code}</td>
+                        <td>
+                            <form action="/bikes/${bike.id}/delete" method="POST" style="display:inline;">
+                                <button type="submit" style="background:red;color:white;">Slet</button>
+                            </form>
+                        </td>
                     </tr>
                 `;
             });
@@ -96,6 +102,16 @@ module.exports = {
             `;
 
             res.send(html);
+        });
+    },
+
+    // Delete reservation (HTML)
+    delete: (req, res) => {
+        const id = req.params.id;
+
+        bikeModel.deleteBike(id, (err) => {
+            if (err) return res.send("Fejl ved sletning af reservation");
+            res.redirect("/bikes");
         });
     },
 

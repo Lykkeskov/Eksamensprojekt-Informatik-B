@@ -11,6 +11,9 @@ router.post("/bikes/new", bikesController.create);
 router.get("/bikes/search", bikesController.searchForm);
 router.post("/bikes/search", bikesController.search);
 
+// Delete reservation
+router.post("/bikes/:id/delete", bikesController.delete);
+
 // API route
 router.get("/api/bikes", bikesController.apiList);
 
