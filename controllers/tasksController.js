@@ -1,8 +1,15 @@
-const db = require("../database"); // hvis du bruger SQLite – ellers tilpas
+const db = require("../db");
 
 // Hent alle tasks
 exports.list = (req, res) => {
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
+    const sql = `
+        SELECT Opgave.*, Cykel.type AS cykel_type, Bruger.navn AS bruger_navn
+        FROM Opgave
+        LEFT JOIN Cykel ON Opgave.cykel_id = Cykel.id
+        LEFT JOIN Bruger ON Opgave.bruger_id = Bruger.id
+    `;
+
+    db.query(sql, (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
@@ -11,16 +18,22 @@ exports.list = (req, res) => {
 // Hent én task
 exports.getOne = (req, res) => {
     const id = req.params.id;
-    db.get("SELECT * FROM tasks WHERE id = ?", [id], (err, row) => {
+
+    const sql = "SELECT * FROM Opgave WHERE id = ?";
+
+    db.query(sql, [id], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(row);
+        res.json(rows[0]);
     });
 };
 
 // Hent tasks for en bestemt cykel
 exports.getByBike = (req, res) => {
     const bikeId = req.params.bikeId;
-    db.all("SELECT * FROM tasks WHERE bikeId = ?", [bikeId], (err, rows) => {
+
+    const sql = "SELECT * FROM Opgave WHERE cykel_id = ?";
+
+    db.query(sql, [bikeId], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
@@ -28,49 +41,53 @@ exports.getByBike = (req, res) => {
 
 // Opret task
 exports.create = (req, res) => {
-    const { bikeId, title, status, mechanic, price } = req.body;
+    const { titel, status, cykel_id, bruger_id } = req.body;
 
-    db.run(
-        "INSERT INTO tasks (bikeId, title, status, mechanic, price) VALUES (?, ?, ?, ?, ?)",
-        [bikeId, title, status, mechanic, price],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+    const sql = `
+        INSERT INTO Opgave (titel, status, cykel_id, bruger_id)
+        VALUES (?, ?, ?, ?)
+    `;
 
-            res.json({
-                id: this.lastID,
-                bikeId,
-                title,
-                status,
-                mechanic,
-                price
-            });
-        }
-    );
+    db.query(sql, [titel, status, cykel_id, bruger_id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        res.json({
+            id: result.insertId,
+            titel,
+            status,
+            cykel_id,
+            bruger_id
+        });
+    });
 };
 
 // Opdater task
 exports.update = (req, res) => {
     const id = req.params.id;
-    const { title, status, mechanic, price } = req.body;
+    const { titel, status, cykel_id, bruger_id } = req.body;
 
-    db.run(
-        "UPDATE tasks SET title = ?, status = ?, mechanic = ?, price = ? WHERE id = ?",
-        [title, status, mechanic, price, id],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+    const sql = `
+        UPDATE Opgave
+        SET titel = ?, status = ?, cykel_id = ?, bruger_id = ?
+        WHERE id = ?
+    `;
 
-            res.json({ updated: this.changes });
-        }
-    );
+    db.query(sql, [titel, status, cykel_id, bruger_id, id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        res.json({ updated: result.affectedRows });
+    });
 };
 
 // Slet task
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    db.run("DELETE FROM tasks WHERE id = ?", [id], function (err) {
+    const sql = "DELETE FROM Opgave WHERE id = ?";
+
+    db.query(sql, [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        res.json({ deleted: this.changes });
+        res.json({ deleted: result.affectedRows });
     });
 };

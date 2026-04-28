@@ -1,46 +1,46 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("./database.db");
-
-// Create table if not exists
-db.run(`
-    CREATE TABLE IF NOT EXISTS bikes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        code TEXT UNIQUE,
-        name TEXT,
-        phone TEXT,
-        email TEXT,
-        description TEXT
-    )
-`);
+const db = require("../db");
 
 module.exports = {
-<<<<<<< HEAD
-=======
 
-    // Create reservation
->>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
-    createBike: (data, callback) => {
-        db.run(
-            "INSERT INTO bikes (code, name, phone, email, description) VALUES (?, ?, ?, ?, ?)",
-            [data.code, data.name, data.phone, data.email, data.description],
-            callback
-        );
-    },
+  // Opret cykel
+  createBike: (data, callback) => {
+    const sql = `
+      INSERT INTO cykel (id, type, status, beskrivelse)
+      VALUES (?, ?, ?, ?)
+    `;
 
-<<<<<<< HEAD
-    getBikeByCode: (code, callback) => {
-        db.get("SELECT * FROM bikes WHERE code = ?", [code], callback);
-=======
-    // Get reservation by code
-    getBikeByCode: (code, callback) => {
-        db.get("SELECT * FROM bikes WHERE code = ?", [code], callback);
-    },
+    db.query(
+      sql,
+      [
+        data.id,
+        data.type,
+        data.status,
+        data.beskrivelse
+      ],
+      (err, result) => {
+        if (err) return callback(err);
+        callback(null, result);
+      }
+    );
+  },
 
-    // NEW: Get all reservations
-    getAllBikes: (callback) => {
-        db.all("SELECT * FROM bikes", [], (err, rows) => {
-            callback(err, rows);
-        });
->>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
-    }
+  // Hent cykel via id
+  getBikeById: (id, callback) => {
+    const sql = "SELECT * FROM cykel WHERE id = ?";
+
+    db.query(sql, [id], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });
+  },
+
+  // Hent alle cykler
+  getAllBikes: (callback) => {
+    const sql = "SELECT * FROM cykel";
+
+    db.query(sql, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
+  }
 };
