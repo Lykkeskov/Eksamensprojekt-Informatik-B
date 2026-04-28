@@ -8,7 +8,7 @@ const db = new sqlite3.Database("./database.db");
 const username = "admin";
 const password = "password123";
 
-// 1. Create users table if it doesn't exist
+
 db.run(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

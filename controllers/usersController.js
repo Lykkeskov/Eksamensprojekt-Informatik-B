@@ -8,7 +8,7 @@ exports.list = (req, res) => {
     });
 };
 
-// Hent én bruger
+// Hent en bruger
 exports.getOne = (req, res) => {
     const id = req.params.id;
     db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {

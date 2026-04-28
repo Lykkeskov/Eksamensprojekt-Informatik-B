@@ -21,7 +21,7 @@ const inventoryRoutes = require("./routes/inventory");
 const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 
-app.use(authRoutes);       // LOGIN SKAL KOMME FØRST
+app.use(authRoutes); 
 app.use(bikesRoutes);
 app.use(tasksRoutes);
 app.use(inventoryRoutes);

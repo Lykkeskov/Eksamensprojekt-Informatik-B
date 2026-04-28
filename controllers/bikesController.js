@@ -75,7 +75,7 @@ module.exports = {
         });
     },
 
-    // ⭐ NEW: API endpoint – return all bikes as JSON
+    // API endpoint to list all reservations in JSON
     apiList: (req, res) => {
         bikeModel.getAllBikes((err, bikes) => {
             if (err) {

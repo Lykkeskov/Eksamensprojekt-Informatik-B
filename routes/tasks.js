@@ -2,32 +2,52 @@ const express = require("express");
 const router = express.Router();
 const tasksController = require("../controllers/tasksController");
 
-// Tjek hvilke funktioner der findes i controlleren
-console.log("TasksController:", tasksController);
+// HTML route
+router.get("/tasks", tasksController.htmlList);
 
-// Brug kun funktioner der findes
-if (tasksController.list) {
-    router.get("/tasks", tasksController.list);
-}
+router.get("/tasks/new", (req, res) => {
+    res.send(`
+        <h1>Opret ny opgave</h1>
+        <form action="/tasks/new" method="POST">
+            <label>Titel:</label><br>
+            <input type="text" name="title" required><br><br>
 
-if (tasksController.getOne) {
-    router.get("/tasks/:id", tasksController.getOne);
-}
+            <label>Beskrivelse:</label><br>
+            <textarea name="description"></textarea><br><br>
 
-if (tasksController.getByBike) {
-    router.get("/tasks/bike/:bikeId", tasksController.getByBike);
-}
+            <label>Status:</label><br>
+            <select name="status">
+                <option value="pending">Afventer</option>
+                <option value="in_progress">I gang</option>
+                <option value="done">Færdig</option>
+            </select><br><br>
 
-if (tasksController.create) {
-    router.post("/tasks", tasksController.create);
-}
+            <button type="submit">Opret opgave</button>
+        </form>
 
-if (tasksController.update) {
-    router.put("/tasks/:id", tasksController.update);
-}
+        <br><a href="/tasks">Tilbage</a>
+    `);
+});
 
-if (tasksController.delete) {
-    router.delete("/tasks/:id", tasksController.delete);
-}
+router.post("/tasks/new", (req, res) => {
+    const { title, description, status } = req.body;
+
+    const db = require("../database");
+    db.run(
+        "INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)",
+        [title, description, status],
+        function (err) {
+            if (err) return res.send("Fejl ved oprettelse af opgave");
+            res.redirect("/tasks");
+        }
+    );
+});
+
+// API routes
+router.get("/api/tasks", tasksController.list);
+router.get("/api/tasks/:id", tasksController.getOne);
+router.post("/api/tasks", tasksController.create);
+router.put("/api/tasks/:id", tasksController.update);
+router.delete("/api/tasks/:id", tasksController.delete);
 
 module.exports = router;
