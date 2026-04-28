@@ -1,66 +1,46 @@
 const express = require("express");
-<<<<<<< HEAD
-const session = require("express-session");
 const path = require("path");
+const session = require("express-session");
 
 const app = express();
+const PORT = 3000;
 
 // Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true })); // For HTML forms
+app.use(express.json()); // For API JSON
+
+// Session setup
 app.use(
     session({
-        secret: "secret-key",
+        secret: "password123",
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
+        cookie: { secure: false }
     })
 );
 
-// Routes
-const authRoutes = require("./routes/auth");
-const bikeRoutes = require("./routes/bikes");
-
-app.use("/", authRoutes);
-app.use("/", bikeRoutes);
-
-// Start server
-app.listen(3000, () => {
-    console.log("Server running on http://localhost:3000");
-=======
-const path = require("path");
-const app = express();
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-const session = require("express-session");
-app.use(session({
-    secret: "password123",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
-
+// Static files
 app.use(express.static(path.join(__dirname, "public")));
 
+// Routes
 const bikesRoutes = require("./routes/bikes");
 const tasksRoutes = require("./routes/tasks");
 const inventoryRoutes = require("./routes/inventory");
 const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 
-app.use(authRoutes); 
+app.use(authRoutes);
 app.use(bikesRoutes);
 app.use(tasksRoutes);
 app.use(inventoryRoutes);
 app.use(usersRoutes);
 
+// Test API
 app.get("/api/test", (req, res) => {
     res.json({ message: "API virker!" });
 });
 
-const PORT = 3000;
+// Start server
 app.listen(PORT, () => {
     console.log("Server kører på port " + PORT);
->>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
 });

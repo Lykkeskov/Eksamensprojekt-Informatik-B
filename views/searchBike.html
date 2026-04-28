@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Søg reservation</title>
+</head>
+<body>
+    <h1>Søg reservation</h1>
+
+    <form action="/bikes/search" method="POST">
+        <label>Indtast reservationskode:</label><br>
+        <input type="text" name="code" required>
+        <button type="submit">Søg</button>
+    </form>
+
+    <br>
+    <a href="/dashboard">Tilbage</a>
+</body>
+</html>
