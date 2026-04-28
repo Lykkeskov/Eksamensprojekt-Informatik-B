@@ -1,5 +1,8 @@
 const bikeModel = require("../models/bikeModel");
+<<<<<<< HEAD
+=======
 const path = require("path");
+>>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
 
 // Generate random 8-digit code
 function generateCode() {
@@ -8,12 +11,19 @@ function generateCode() {
 
 module.exports = {
 
+<<<<<<< HEAD
+    newForm: (req, res) => {
+        res.sendFile("newBike.html", { root: "./views" });
+    },
+
+=======
     // Show form to create a new reservation
     newForm: (req, res) => {
         res.sendFile(path.resolve(__dirname, "../views/newBike.html"));
     },
 
     // Create reservation
+>>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
     create: (req, res) => {
         const code = generateCode();
 
@@ -36,6 +46,27 @@ module.exports = {
         });
     },
 
+<<<<<<< HEAD
+    searchForm: (req, res) => {
+        res.sendFile("searchBike.html", { root: "./views" });
+    },
+
+    search: (req, res) => {
+        const code = req.body.code;
+
+        bikeModel.getBikeByCode(code, (err, bike) => {
+            if (!bike) return res.send("No reservation found");
+
+            res.send(`
+                <h1>Reservation Details</h1>
+                <p><strong>Code:</strong> ${bike.code}</p>
+                <p><strong>Name:</strong> ${bike.name}</p>
+                <p><strong>Phone:</strong> ${bike.phone}</p>
+                <p><strong>Email:</strong> ${bike.email}</p>
+                <p><strong>Description:</strong> ${bike.description}</p>
+                <a href="/dashboard">Back</a>
+            `);
+=======
     // List all reservations (HTML)
     list: (req, res) => {
         bikeModel.getAllBikes((err, bikes) => {
@@ -82,6 +113,7 @@ module.exports = {
                 return res.status(500).json({ error: "Databasefejl" });
             }
             res.json(bikes);
+>>>>>>> 58044b3959d1dd3413c8f87ffbd91720bd863a1f
         });
     }
 };
