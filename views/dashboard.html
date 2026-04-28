@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard – Cykelværkstedet</title>
+    <title>Dashboard - Cykelværkstedet</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,35 +29,45 @@
         a.button {
             display: inline-block;
             padding: 10px 15px;
-            background: #2a7ae2;
+            background: rgba(42,122,226);
             color: white;
             border-radius: 5px;
             text-decoration: none;
             margin-right: 10px;
         }
+        a.button:hover {
+            background: rgb(31, 95, 184);
     </style>
 </head>
 <body>
 
 <div class="topbar">
-    Cykelværkstedet – Dashboard
+    Cykelværkstedet - Dashboard
 </div>
 
 <div class="container">
 
     <div class="card">
-        <h2>Velkommen!</h2>
-        <p>Du er logget ind som: <strong>Admin</strong></p>
-        <a class="button" href="/logout">Log ud</a>
+        <h2>Velkommen Admin!</h2>
+        <p>Sidst åbnet:</p>
+
+
+
+
+
+
     </div>
 
     <div class="card">
-        <h2>Hurtige handlinger</h2>
+        <h2>Funktioner</h2>
         <a class="button" href="/bikes/new">Ny reservation</a>
         <a class="button" href="/bikes/search">Søg reservation</a>
         <a class="button" href="/bikes">Se reservationer</a>
         <a class="button" href="/tasks">Se opgaver</a>
-        <a class="button" href="/inventory">Se lager</a>
+        <a class="button" href="/inventory">Se lager</a>    
+    </div>
+    <div class="card">
+    <a class="button" href="/logout">Log ud</a>
     </div>
 
 </div>
