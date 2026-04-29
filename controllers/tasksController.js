@@ -1,187 +1,93 @@
-const db = require("../database");
+const db = require("../db");
 
-// HTML: List + Create form
-exports.htmlList = (req, res) => {
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
-        if (err) return res.send("Fejl ved hentning af tasks");
-
-        let html = `
-            <h1>Opgaver</h1>
-
-            <h2>Opret ny opgave</h2>
-            <form action="/tasks/new" method="POST">
-                <label>Titel:</label><br>
-                <input type="text" name="title" required><br><br>
-
-                <label>Beskrivelse:</label><br>
-                <textarea name="description" required></textarea><br><br>
-
-                <label>Status:</label><br>
-                <select name="status">
-                    <option value="pending">Afventer</option>
-                    <option value="in_progress">I gang</option>
-                    <option value="done">Færdig</option>
-                </select><br><br>
-
-                <button type="submit">Opret opgave</button>
-            </form>
-
-            <hr>
-
-            <h2>Eksisterende opgaver</h2>
-            <table border="1" cellpadding="10">
-                <tr>
-                    <th>ID</th>
-                    <th>Titel</th>
-                    <th>Beskrivelse</th>
-                    <th>Status</th>
-                    <th>Handlinger</th>
-                </tr>
-        `;
-
-        rows.forEach(t => {
-            html += `
-                <tr>
-                    <td>${t.id}</td>
-                    <td>${t.title}</td>
-                    <td>${t.description}</td>
-                    <td>${t.status}</td>
-                    <td>
-                        <form action="/tasks/${t.id}/done" method="POST" style="display:inline;">
-                            <button type="submit">Færdig</button>
-                        </form>
-
-                        <form action="/tasks/${t.id}/delete" method="POST" style="display:inline;">
-                            <button type="submit" style="background:red;color:white;">Slet</button>
-                        </form>
-                    </td>
-                </tr>
-            `;
-        });
-
-        html += `
-            </table>
-            <br>
-            <a href="/dashboard">Tilbage</a>
-        `;
-
-        res.send(html);
-    });
-};
-
-// HTML: Create task (with input validation)
-exports.htmlCreate = (req, res) => {
-    const { title, description, status } = req.body;
-
-    // Inputvalidering
-    if (!title || title.trim().length < 2) {
-        return res.send("Titel skal være mindst 2 tegn.");
-    }
-
-    if (!description || description.trim().length < 5) {
-        return res.send("Beskrivelse skal være mindst 5 tegn.");
-    }
-
-    const allowedStatuses = ["pending", "in_progress", "done"];
-    if (!allowedStatuses.includes(status)) {
-        return res.send("Ugyldig status.");
-    }
-
-    db.run(
-        "INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)",
-        [title.trim(), description.trim(), status],
-        function (err) {
-            if (err) return res.send("Fejl ved oprettelse af opgave");
-            res.redirect("/tasks");
-        }
-    );
-};
-
-// HTML: Mark task as done
-exports.markDone = (req, res) => {
-    const id = req.params.id;
-
-    db.run(
-        "UPDATE tasks SET status = 'done' WHERE id = ?",
-        [id],
-        function (err) {
-            if (err) return res.send("Fejl ved opdatering af opgave");
-            res.redirect("/tasks");
-        }
-    );
-};
-
-// HTML: Delete task
-exports.deleteHtml = (req, res) => {
-    const id = req.params.id;
-
-    db.run("DELETE FROM tasks WHERE id = ?", [id], function (err) {
-        if (err) return res.send("Fejl ved sletning af opgave");
-        res.redirect("/tasks");
-    });
-};
-
-// API: Get all tasks
+// Hent alle tasks
 exports.list = (req, res) => {
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
+    const sql = `
+        SELECT Opgave.*, Cykel.type AS cykel_type, Bruger.navn AS bruger_navn
+        FROM Opgave
+        LEFT JOIN Cykel ON Opgave.cykel_id = Cykel.id
+        LEFT JOIN Bruger ON Opgave.bruger_id = Bruger.id
+    `;
+
+    db.query(sql, (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
 };
 
-// API: Get one task
+// Hent én task
 exports.getOne = (req, res) => {
     const id = req.params.id;
 
-    db.get("SELECT * FROM tasks WHERE id = ?", [id], (err, row) => {
+    const sql = "SELECT * FROM Opgave WHERE id = ?";
+
+    db.query(sql, [id], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(row);
+        res.json(rows[0]);
     });
 };
 
-// API: Create task
-exports.create = (req, res) => {
-    const { title, description, status } = req.body;
+// Hent tasks for en bestemt cykel
+exports.getByBike = (req, res) => {
+    const bikeId = req.params.bikeId;
 
-    db.run(
-        "INSERT INTO tasks (title, description, status) VALUES (?, ?, ?)",
-        [title, description, status || "pending"],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+    const sql = "SELECT * FROM Opgave WHERE cykel_id = ?";
 
-            res.json({
-                id: this.lastID,
-                title,
-                description,
-                status: status || "pending"
-            });
-        }
-    );
+    db.query(sql, [bikeId], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
 };
 
-// API: Update task
+// Opret task
+exports.create = (req, res) => {
+    const { titel, status, cykel_id, bruger_id } = req.body;
+
+    const sql = `
+        INSERT INTO Opgave (titel, status, cykel_id, bruger_id)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    db.query(sql, [titel, status, cykel_id, bruger_id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        res.json({
+            id: result.insertId,
+            titel,
+            status,
+            cykel_id,
+            bruger_id
+        });
+    });
+};
+
+// Opdater task
 exports.update = (req, res) => {
     const id = req.params.id;
-    const { title, description, status } = req.body;
+    const { titel, status, cykel_id, bruger_id } = req.body;
 
-    db.run(
-        "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?",
-        [title, description, status, id],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+    const sql = `
+        UPDATE Opgave
+        SET titel = ?, status = ?, cykel_id = ?, bruger_id = ?
+        WHERE id = ?
+    `;
 
-            res.json({ updated: this.changes });
-        }
-    );
+    db.query(sql, [titel, status, cykel_id, bruger_id, id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        res.json({ updated: result.affectedRows });
+    });
 };
 
-// API: Delete task
+// Slet task
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    db.run("DELETE FROM tasks WHERE id = ?", [id], function (err) {
+    const sql = "DELETE FROM Opgave WHERE id = ?";
+
+    db.query(sql, [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        res.json({ deleted: this.changes });
+        res.json({ deleted: result.affectedRows });
     });
 };

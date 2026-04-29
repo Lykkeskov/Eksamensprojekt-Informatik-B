@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
+const path = require("path");
 
 // Show login page
 router.get("/", (req, res) => {
-    res.sendFile("login.html", { root: "./views" });
+    res.sendFile(path.join(__dirname, "../views/login.html"));
 });
 
 // Login logic

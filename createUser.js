@@ -1,44 +1,30 @@
 const bcrypt = require("bcrypt");
-const sqlite3 = require("sqlite3").verbose();
+const db = require("./db");
 
-// Open database
-const db = new sqlite3.Database("./database.db");
-
-// CHANGE THESE TO CREATE A NEW USER
-const username = "admin";
+const navn = "admin";
 const password = "password123";
+const rolle = "admin";
 
+async function createUser() {
+  try {
+    const hash = await bcrypt.hash(password, 10);
 
-db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password TEXT
-    )
-`, (err) => {
-    if (err) {
-        console.error("Error creating table:", err);
-        return;
-    }
+    const sql = `
+      INSERT INTO Bruger (navn, rolle, password)
+      VALUES (?, ?, ?)
+    `;
 
-    // 2. Hash password and insert user
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-            console.error("Error hashing password:", err);
-            return;
-        }
-
-        db.run(
-            "INSERT INTO users (username, password) VALUES (?, ?)",
-            [username, hash],
-            function (err) {
-                if (err) {
-                    console.error("Error inserting user:", err);
-                } else {
-                    console.log(`User '${username}' created successfully!`);
-                }
-                db.close();
-            }
-        );
+    db.query(sql, [navn, rolle, hash], (err, result) => {
+      if (err) {
+        console.error("Fejl:", err);
+      } else {
+        console.log("Bruger oprettet!");
+      }
+      process.exit();
     });
-});
+  } catch (err) {
+    console.error("Hash fejl:", err);
+  }
+}
+
+createUser();

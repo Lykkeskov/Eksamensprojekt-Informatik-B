@@ -1,62 +1,63 @@
-const db = require("../database");
+const db = require("../db");
 
 // Hent alle brugere
 exports.list = (req, res) => {
-    db.all("SELECT * FROM users", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-    });
+  db.query("SELECT * FROM Bruger", (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
 };
 
 // Hent en bruger
 exports.getOne = (req, res) => {
-    const id = req.params.id;
-    db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(row);
-    });
+  const id = req.params.id;
+
+  db.query("SELECT * FROM Bruger WHERE id = ?", [id], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results[0]);
+  });
 };
 
 // Opret bruger
 exports.create = (req, res) => {
-    const { username, password, role } = req.body;
+  const { navn, password, rolle } = req.body;
 
-    db.run(
-        "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-        [username, password, role],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+  db.query(
+    "INSERT INTO Bruger (navn, password, rolle) VALUES (?, ?, ?)",
+    [navn, password, rolle],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
 
-            res.json({
-                id: this.lastID,
-                username,
-                role
-            });
-        }
-    );
+      res.json({
+        id: result.insertId,
+        navn,
+        rolle
+      });
+    }
+  );
 };
 
 // Opdater bruger
 exports.update = (req, res) => {
-    const id = req.params.id;
-    const { username, password, role } = req.body;
+  const id = req.params.id;
+  const { navn, password, rolle } = req.body;
 
-    db.run(
-        "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?",
-        [username, password, role, id],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ updated: this.changes });
-        }
-    );
+  db.query(
+    "UPDATE Bruger SET navn = ?, password = ?, rolle = ? WHERE id = ?",
+    [navn, password, rolle, id],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ updated: result.affectedRows });
+    }
+  );
 };
 
 // Slet bruger
 exports.delete = (req, res) => {
-    const id = req.params.id;
+  const id = req.params.id;
 
-    db.run("DELETE FROM users WHERE id = ?", [id], function (err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ deleted: this.changes });
-    });
+  db.query("DELETE FROM Bruger WHERE id = ?", [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ deleted: result.affectedRows });
+  });
 };

@@ -1,43 +1,46 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("./database.db");
-
-// Create table if not exists
-db.run(`
-    CREATE TABLE IF NOT EXISTS bikes (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        code TEXT UNIQUE,
-        name TEXT,
-        phone TEXT,
-        email TEXT,
-        description TEXT
-    )
-`);
+const db = require("../db");
 
 module.exports = {
 
-    // Create reservation
-    createBike: (data, callback) => {
-        db.run(
-            "INSERT INTO bikes (code, name, phone, email, description) VALUES (?, ?, ?, ?, ?)",
-            [data.code, data.name, data.phone, data.email, data.description],
-            callback
-        );
-    },
+  // Opret cykel
+  createBike: (data, callback) => {
+    const sql = `
+      INSERT INTO cykel (id, type, status, beskrivelse)
+      VALUES (?, ?, ?, ?)
+    `;
 
-    // Get reservation by code
-    getBikeByCode: (code, callback) => {
-        db.get("SELECT * FROM bikes WHERE code = ?", [code], callback);
-    },
+    db.query(
+      sql,
+      [
+        data.id,
+        data.type,
+        data.status,
+        data.beskrivelse
+      ],
+      (err, result) => {
+        if (err) return callback(err);
+        callback(null, result);
+      }
+    );
+  },
 
-    // Get all reservations
-    getAllBikes: (callback) => {
-        db.all("SELECT * FROM bikes", [], (err, rows) => {
-            callback(err, rows);
-        });
-    },
+  // Hent cykel via id
+  getBikeById: (id, callback) => {
+    const sql = "SELECT * FROM cykel WHERE id = ?";
 
-    // ❗ NEW: Delete reservation by ID
-    deleteBike: (id, callback) => {
-        db.run("DELETE FROM bikes WHERE id = ?", [id], callback);
-    }
+    db.query(sql, [id], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });
+  },
+
+  // Hent alle cykler
+  getAllBikes: (callback) => {
+    const sql = "SELECT * FROM cykel";
+
+    db.query(sql, (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
+  }
 };

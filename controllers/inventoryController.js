@@ -1,54 +1,56 @@
-const db = require("../database");
+const db = require("../db");
 
-// Hent alle dele
+// Hent alle reservedele
 exports.list = (req, res) => {
-    db.all("SELECT * FROM inventory", [], (err, rows) => {
+    db.query("SELECT * FROM Reservedele", (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
 };
 
-// Opret ny del
+// Opret reservedel
 exports.create = (req, res) => {
-    const { name, quantity, price } = req.body;
+    const { navn, antal } = req.body;
 
-    db.run(
-        "INSERT INTO inventory (name, quantity, price) VALUES (?, ?, ?)",
-        [name, quantity, price],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
+    const sql = `
+        INSERT INTO Reservedele (navn, antal)
+        VALUES (?, ?)
+    `;
 
-            res.json({
-                id: this.lastID,
-                name,
-                quantity,
-                price
-            });
-        }
-    );
+    db.query(sql, [navn, antal], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+
+        res.json({
+            id: result.insertId,
+            navn,
+            antal
+        });
+    });
 };
 
-// Opdater del
+// Opdater reservedel
 exports.update = (req, res) => {
     const id = req.params.id;
-    const { name, quantity, price } = req.body;
+    const { navn, antal } = req.body;
 
-    db.run(
-        "UPDATE inventory SET name = ?, quantity = ?, price = ? WHERE id = ?",
-        [name, quantity, price, id],
-        function (err) {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ updated: this.changes });
-        }
-    );
+    const sql = `
+        UPDATE Reservedele
+        SET navn = ?, antal = ?
+        WHERE id = ?
+    `;
+
+    db.query(sql, [navn, antal, id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ updated: result.affectedRows });
+    });
 };
 
-// Slet del
+// Slet reservedel
 exports.delete = (req, res) => {
     const id = req.params.id;
 
-    db.run("DELETE FROM inventory WHERE id = ?", [id], function (err) {
+    db.query("DELETE FROM Reservedele WHERE id = ?", [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json({ deleted: this.changes });
+        res.json({ deleted: result.affectedRows });
     });
 };
