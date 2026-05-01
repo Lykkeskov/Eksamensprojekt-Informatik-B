@@ -45,3 +45,12 @@ CREATE TABLE Cykel_Reservedele (
     FOREIGN KEY (cykel_id) REFERENCES Cykel(id),
     FOREIGN KEY (reservedel_id) REFERENCES Reservedele(id)
 );
+
+CREATE TABLE Reservation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL
+);
