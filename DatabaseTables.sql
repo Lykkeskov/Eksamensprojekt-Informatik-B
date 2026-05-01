@@ -46,6 +46,7 @@ CREATE TABLE Cykel_Reservedele (
     FOREIGN KEY (reservedel_id) REFERENCES Reservedele(id)
 );
 
+-- Reservation table is very important for the thing yes
 CREATE TABLE Reservation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     code VARCHAR(20) NOT NULL,
