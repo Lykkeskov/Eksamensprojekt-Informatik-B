@@ -10,7 +10,7 @@ async function createUser() {
     const hash = await bcrypt.hash(password, 10);
 
     const sql = `
-      INSERT INTO Bruger (navn, rolle, password)
+      INSERT INTO bruger (navn, rolle, password)
       VALUES (?, ?, ?)
     `;
 

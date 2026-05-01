@@ -4,10 +4,16 @@ const bcrypt = require("bcrypt");
 module.exports = {
 
   getUserByName: (navn, callback) => {
-    const sql = "SELECT * FROM Bruger WHERE navn = ?";
+    // FIXED: bruger (lowercase) to match your actual table
+    const sql = "SELECT * FROM bruger WHERE navn = ?";
 
     db.query(sql, [navn], (err, results) => {
       if (err) return callback(err);
+
+      if (results.length === 0) {
+        return callback(null, null);
+      }
+
       callback(null, results[0]);
     });
   },
@@ -16,8 +22,9 @@ module.exports = {
     try {
       const hash = await bcrypt.hash(data.password, 10);
 
+      // FIXED: bruger (lowercase)
       const sql = `
-        INSERT INTO Bruger (navn, rolle, password)
+        INSERT INTO bruger (navn, rolle, password)
         VALUES (?, ?, ?)
       `;
 
