@@ -49,7 +49,10 @@ app.use("/", authRoutes);
 
 // Protected routes
 app.use("/bikes", requireLogin, bikeRoutes);
-app.use("/tasks", requireLogin, tasksRoutes);
+
+// ⭐ FIXED: Tasks route added properly
+app.use("/", requireLogin, tasksRoutes);
+
 app.use("/inventory", requireLogin, inventoryRoutes);
 app.use("/users", requireAdmin, usersRoutes);
 
@@ -72,7 +75,7 @@ app.get("/dashboard", requireLogin, (req, res) => {
   `);
 });
 
-// Start server (YOUR ORIGINAL VERSION)
+// Start server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log("Server kører på http://localhost:" + PORT);

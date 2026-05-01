@@ -1,4 +1,5 @@
 const bikeModel = require("../models/bikeModel");
+const db = require("../db");
 
 // Generate random 8-digit code
 function generateCode() {
@@ -85,9 +86,20 @@ module.exports.createBike = (req, res) => {
     if (!phone || !/^[0-9+\-\s]{6,15}$/.test(phone)) return res.send("Invalid phone");
     if (!description || description.length < 5) return res.send("Description too short");
 
+    // 1. Create reservation
     bikeModel.createReservation({ code, name, email, phone, description }, (err) => {
         if (err) return res.send("Error saving reservation");
 
+        // 2. Automatically create a bike using the reservation code as the bike ID
+        db.query(
+            "INSERT INTO cykel (id, type, status, beskrivelse) VALUES (?, ?, ?, ?)",
+            [code, "Reserved", "pending", "Created from reservation"],
+            (err) => {
+                if (err) console.log("Fejl ved oprettelse af cykel:", err);
+            }
+        );
+
+        // 3. Show success page
         res.send(`
             <h1>Reservation Created!</h1>
             <p>Your reservation code is <strong>${code}</strong></p>
@@ -95,6 +107,7 @@ module.exports.createBike = (req, res) => {
         `);
     });
 };
+
 
 /* -------------------- DELETE -------------------- */
 
