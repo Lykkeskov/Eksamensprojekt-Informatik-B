@@ -1,62 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login – Cykelværkstedet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <meta charset="UTF-8"> 
+        <title>Login - Cykelværkstedet</title> 
+        <style> 
+        *, *::before, *::after { 
+            box-sizing: border-box; 
         }
-        .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            width: 300px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .login-box img {
-            display: block;
-            margin: 0 auto 20px;
-            max-width: 100%;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #2a7ae2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #1f5fb8;
-        }
-    </style>
-</head>
-<body>
 
-<div class="login-box">
-    <h2>Login</h2>
-    <img src="/images/company-logo.jpg" alt="Company Logo">
+        input, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; '
+            
+            display: block; 
+        } 
+        
+        body { 
+            font-family: Arial, sans-serif; 
+            background-image: url('/images/cykler.jpg'); 
+            background-repeat: no-repeat; 
+            background-size: cover; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        } 
+        
+        .login-box { 
+            background: rgb(255, 255, 255, 0.4); 
+            backdrop-filter: blur(10px);    
+            padding: 30px; 
+            border-radius: 10px; 
+            width: 300px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            text-align: center; 
+        } 
+        .login-box img { 
+            display: block; 
+            margin: 0 auto 20px; 
+            max-width: 100%; 
+        } 
+        input { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+        } 
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #2a7ae2; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        } 
+        button:hover { 
+            background: #1f5fb8; 
+        } 
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+    </style> 
+</head> 
+<body> 
+    <div class="login-box"> 
+        <h2>Cykelværkstedet</h2> 
+        <img src="/images/logo-placeholder.png" alt="Company Logo"> 
         <form method="POST" action="/login">
           <input type="text" name="navn" placeholder="Brugernavn" required />
           <input type="password" name="password" placeholder="Kodeord" required />
           <button type="submit">Login</button>
-        </form>
-</div>
-
-</body>
-</html>
+        </form> 
+    </div> 
+</body> 
+</html> 
