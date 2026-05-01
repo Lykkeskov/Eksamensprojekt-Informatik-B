@@ -1,37 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const bikesController = require("../controllers/bikesController");
+const controller = require("../controllers/bikesController");
 
-// Hent alle cykler
-router.get("/bikes", bikesController.getAllBikes);
+// List all reservations
+router.get("/", controller.listBikes);
 
-// Opret cykel
-router.post("/bikes", bikesController.createBike);
-
-module.exports = router;
-
-/*
-const express = require("express");
-const router = express.Router();
-const bikesController = require("../controllers/bikesController");
-
+// Show create form
+router.get("/new", controller.newBikeForm);
 
 // Create reservation
-router.get("/bikes/new", bikesController.newForm);
-router.post("/bikes/new", bikesController.create);
+router.post("/new", controller.createBike);
 
-// Search reservation
-router.get("/bikes/search", bikesController.searchForm);
-router.post("/bikes/search", bikesController.search);
+// Delete reservation
+router.post("/:id/delete", controller.deleteBike);
 
-// HTML routes
-router.get("/bikes", bikesController.list);
-router.get("/bikes/new", bikesController.newForm);
-router.post("/bikes/new", bikesController.create);
+// Show search form
+router.get("/search", (req, res) => {
+    res.send(`
+        <h1>Search Reservation</h1>
+        <form action="/bikes/search" method="POST">
+            <label>Reservation Code:</label><br>
+            <input name="code"><br><br>
+            <button type="submit">Search</button>
+        </form>
+    `);
+});
 
-// API route (skal ligge før module.exports)
-router.get("/api/bikes", bikesController.apiList);
+// Handle search
+router.post("/search", controller.searchReservationByCode);
 
 module.exports = router;
-
- */

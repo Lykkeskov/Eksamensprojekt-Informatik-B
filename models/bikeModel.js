@@ -1,46 +1,24 @@
 const db = require("../db");
 
-module.exports = {
+module.exports.getAllReservations = (callback) => {
+    db.query("SELECT * FROM Reservation ORDER BY id DESC", callback);
+};
 
-  // Opret cykel
-  createBike: (data, callback) => {
-    const sql = `
-      INSERT INTO cykel (id, type, status, beskrivelse)
-      VALUES (?, ?, ?, ?)
-    `;
-
+module.exports.createReservation = (data, callback) => {
     db.query(
-      sql,
-      [
-        data.id,
-        data.type,
-        data.status,
-        data.beskrivelse
-      ],
-      (err, result) => {
-        if (err) return callback(err);
-        callback(null, result);
-      }
+        "INSERT INTO Reservation (code, name, email, phone, description) VALUES (?, ?, ?, ?, ?)",
+        [data.code, data.name, data.email, data.phone, data.description],
+        callback
     );
-  },
+};
 
-  // Hent cykel via id
-  getBikeById: (id, callback) => {
-    const sql = "SELECT * FROM cykel WHERE id = ?";
+module.exports.deleteReservation = (id, callback) => {
+    db.query("DELETE FROM Reservation WHERE id = ?", [id], callback);
+};
 
-    db.query(sql, [id], (err, results) => {
-      if (err) return callback(err);
-      callback(null, results[0]);
+module.exports.getReservationByCode = (code, callback) => {
+    db.query("SELECT * FROM Reservation WHERE code = ?", [code], (err, results) => {
+        if (err) return callback(err);
+        callback(null, results[0]);
     });
-  },
-
-  // Hent alle cykler
-  getAllBikes: (callback) => {
-    const sql = "SELECT * FROM cykel";
-
-    db.query(sql, (err, results) => {
-      if (err) return callback(err);
-      callback(null, results);
-    });
-  }
 };
