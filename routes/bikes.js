@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/bikesController");
+const path = require("path");
 
 // List all reservations
 router.get("/", controller.listBikes);
@@ -16,14 +17,7 @@ router.post("/:id/delete", controller.deleteBike);
 
 // Show search form
 router.get("/search", (req, res) => {
-    res.send(`
-        <h1>Search Reservation</h1>
-        <form action="/bikes/search" method="POST">
-            <label>Reservation Code:</label><br>
-            <input name="code"><br><br>
-            <button type="submit">Search</button>
-        </form>
-    `);
+    res.sendFile(path.join(__dirname, "../views/searchBike.html"));
 });
 
 // Handle search

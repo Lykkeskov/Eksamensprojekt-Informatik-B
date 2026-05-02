@@ -1,18 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Søg reservation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8"> 
+    <title>Søg reservation - Cykelværkstedets</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Poppins', Arial, sans-serif;
+            background-image: url('/images/cykler.jpg'); 
+            background-repeat: no-repeat; 
+            background-size: cover; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        .search-box { 
+            background: rgb(255, 255, 255, 0.4); 
+            backdrop-filter: blur(10px);    
+            padding: 50px; 
+            border-radius: 10px; 
+            width: 500px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+
+        input { 
+            font-family: inherit;
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+        } 
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #2a7ae2; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+        }
+        button:hover {
+            background: rgb(31, 95, 184);
+        }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #2a7ae2;
+            text-decoration: none;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+
+    </style>
+    
 </head>
 <body>
-    <h1>Søg reservation</h1>
+    <div class="search-box"> 
+        <h1>Søg reservation</h1>
 
-    <form action="/bikes/search" method="POST">
-        <label>Indtast reservationskode:</label><br>
-        <input type="text" name="code" required>
-        <button type="submit">Søg</button>
-    </form>
+        <form action="/bikes/search" method="POST">
+            <label>Indtast reservationskode:</label><br>
+            <input type="text" name="code" required>
+            <button type="submit">Søg</button>
+        </form>
 
-    <br>
-    <a href="/dashboard">Tilbage</a>
+        <br>
+        <a href="/dashboard">Tilbage</a>
+    </div> 
 </body>
 </html>
