@@ -41,7 +41,7 @@ function requireAdmin(req, res, next) {
 const authRoutes = require("./routes/auth");
 const bikeRoutes = require("./routes/bikes");
 const tasksRoutes = require("./routes/tasks");
-const inventoryRoutes = require("./routes/inventory");
+const inventoryRoutes = require("./routes/inventory");   // <-- INVENTORY ROUTES
 const usersRoutes = require("./routes/users");
 
 // Public routes
@@ -50,10 +50,12 @@ app.use("/", authRoutes);
 // Protected routes
 app.use("/bikes", requireLogin, bikeRoutes);
 
-// ⭐ FIXED: Tasks route added properly
+// Tasks route
 app.use("/", requireLogin, tasksRoutes);
 
+// Inventory route
 app.use("/inventory", requireLogin, inventoryRoutes);
+
 app.use("/users", requireAdmin, usersRoutes);
 
 // Dashboard (HTML)
