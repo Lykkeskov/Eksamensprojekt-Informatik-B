@@ -54,9 +54,7 @@ module.exports.listBikes = (req, res) => {
 /* -------------------- CREATE FORM -------------------- */
 
 module.exports.newBikeForm = (req, res) => {
-    const filePath = path.join(__dirname, "../views/newBike.html");
-    console.log("=== LOADING FORM FROM FILE ===", filePath);
-    res.sendFile(filePath);
+    res.sendFile(path.join(__dirname, "../views/newBike.html"));
 };
 
 /* -------------------- CREATE -------------------- */

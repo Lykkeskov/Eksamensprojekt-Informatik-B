@@ -1,9 +1,79 @@
-<h1>New 3333Bike Reservation</h1>
+<!DOCTYPE html> 
+<html lang="en"> 
+    <head> 
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <meta charset="UTF-8"> 
+        <title>Login - Cykelværkstedet</title> 
+        <style>
 
-<form action="/bikes/new" method="POST">
-    <input type="text" name="name" placeholder="Customer Name" required><br>
-    <input type="text" name="phone" placeholder="Phone Number" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <textarea name="description" placeholder="What needs to be fixed?" required></textarea><br>
-    <button type="submit">Create Reservation2321</button>
-</form>
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+        }       
+
+        body { 
+            font-family: 'Poppins', Arial, sans-serif;
+            background-image: url('/images/cykler.jpg'); 
+            background-repeat: no-repeat; 
+            background-size: cover; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+        }
+
+        .reservation-box { 
+            background: rgb(255, 255, 255, 0.4); 
+            backdrop-filter: blur(10px);    
+            padding: 50px; 
+            border-radius: 10px; 
+            width: 500px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        
+        input { 
+            font-family: inherit;
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+        } 
+
+        textarea { 
+            font-family: inherit;
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+            resize: vertical; 
+        } 
+
+        button { 
+            width: 100%; 
+            padding: 10px; 
+            background: #2a7ae2; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        } 
+        button:hover { 
+            background: #1f5fb8; 
+        } 
+    </style>
+    </head>
+    <body> 
+        <div class="reservation-box"> 
+            <h2>New Bike Reservation</h2>
+                <form action="/bikes/new" method="POST">
+                    <input type="text" name="name" placeholder="Customer Name" required><br>
+                    <input type="text" name="phone" placeholder="Phone Number" required><br>
+                    <input type="email" name="email" placeholder="Email" required><br>
+                    <textarea name="description" placeholder="What needs to be fixed?" required></textarea><br>
+                    <button type="submit">Fortsæt Reservation</button>
+                </form>
+        </div> 
+    </body> 
+</html> 
