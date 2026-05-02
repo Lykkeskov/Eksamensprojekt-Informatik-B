@@ -3,11 +3,11 @@ const db = require("../db");
 // LIST INVENTORY (bikes + spare parts)
 exports.list = (req, res) => {
     // First query: bikes from Reservation
-    db.query("SELECT code, name FROM Reservation", (err, bikes) => {
+    db.query("SELECT code, name FROM reservation", (err, bikes) => {
         if (err) return res.status(500).send("Database error (bikes)");
 
         // Second query: spare parts from Reservedele
-        db.query("SELECT id, navn, antal FROM Reservedele", (err2, parts) => {
+        db.query("SELECT id, navn, antal FROM reservedele", (err2, parts) => {
             if (err2) return res.status(500).send("Database error (parts)");
 
             let html = `
@@ -88,7 +88,7 @@ exports.addPart = (req, res) => {
 
     // Find ALL parts with same name (to merge duplicates)
     db.query(
-        "SELECT id, antal FROM Reservedele WHERE navn = ?",
+        "SELECT id, antal FROM reservedele WHERE navn = ?",
         [navn],
         (err, rows) => {
             if (err) return res.status(500).send("Database error (check part)");
@@ -102,7 +102,7 @@ exports.addPart = (req, res) => {
                 }
 
                 db.query(
-                    "INSERT INTO Reservedele (navn, antal) VALUES (?, ?)",
+                    "INSERT INTO reservedele (navn, antal) VALUES (?, ?)",
                     [navn, antalInt],
                     (err2) => {
                         if (err2) return res.status(500).send("Database error (insert part)");
@@ -127,7 +127,7 @@ exports.addPart = (req, res) => {
 
             // Update main row
             db.query(
-                "UPDATE Reservedele SET antal = ? WHERE id = ?",
+                "UPDATE reservedele SET antal = ? WHERE id = ?",
                 [totalAmount, mainId],
                 (err3) => {
                     if (err3) return res.status(500).send("Database error (update part)");
@@ -137,7 +137,7 @@ exports.addPart = (req, res) => {
 
                     if (duplicateIds.length > 0) {
                         db.query(
-                            "DELETE FROM Reservedele WHERE id IN (?)",
+                            "DELETE FROM reservedele WHERE id IN (?)",
                             [duplicateIds],
                             () => res.redirect("/inventory")
                         );
@@ -155,7 +155,7 @@ exports.deletePart = (req, res) => {
     const id = req.params.id;
 
     db.query(
-        "DELETE FROM Reservedele WHERE id = ?",
+        "DELETE FROM reservedele WHERE id = ?",
         [id],
         (err) => {
             if (err) return res.status(500).send("Database error (delete part)");
