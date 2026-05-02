@@ -1,5 +1,9 @@
 # Eksamensprojekt Informatik B 2026
-Hjemmesidens adresse er: [http://cykel.orksat.me:3000](http://cykel.orksat.me:3000)
+Besøg vores hjemmeside her: [https://cykel.orksat.me](https://cykel.orksat.me)
+
+Brug det her til logge ind:
+- Brugernavn: medarbejder
+- Kodeord: password123
 
 ## Projektstyring
 - [Trello](https://trello.com/invite/b/69c1168e43a6647243b5e859/ATTIe81f70cfb3b9b0ffdee5ee700d1539425496200E/informatik-b-eksamensprojekt)
@@ -8,4 +12,4 @@ Hjemmesidens adresse er: [http://cykel.orksat.me:3000](http://cykel.orksat.me:30
 ## Opgavefordeling ud fra trelags modellen - rolleoversigt
 - Frontend, UI/UX: Tobias
 - Backend, API: Emre
-- Database, sikkerhed, scrummaster: Halfdan
+- Database, sikkerhed, networking, scrummaster: Halfdan
