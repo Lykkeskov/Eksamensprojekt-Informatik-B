@@ -150,7 +150,7 @@ exports.addPart = (req, res) => {
     );
 };
 
-// DELETE SPARE PART
+// DELETE SPARE PART :)))
 exports.deletePart = (req, res) => {
     const id = req.params.id;
 
