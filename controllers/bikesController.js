@@ -1,5 +1,6 @@
 const bikeModel = require("../models/bikeModel");
 const db = require("../db");
+const path = require("path");
 
 // Generate random 8-digit code
 function generateCode() {
@@ -13,7 +14,7 @@ module.exports.listBikes = (req, res) => {
         if (err) return res.send("Error loading reservations");
 
         let html = `
-            <h1>All Reservations</h1>
+            <h1>All Reservations123455</h1>
             <a href="/dashboard">⬅ Back</a><br><br>
             <a href="/bikes/new">New Reservation</a><br><br>
 
@@ -53,26 +54,9 @@ module.exports.listBikes = (req, res) => {
 /* -------------------- CREATE FORM -------------------- */
 
 module.exports.newBikeForm = (req, res) => {
-    res.send(`
-        <h1>New Reservation</h1>
-        <a href="/bikes">⬅ Back</a><br><br>
-
-        <form action="/bikes/new" method="POST">
-            <label>Name:</label><br>
-            <input name="name"><br><br>
-
-            <label>Email:</label><br>
-            <input name="email"><br><br>
-
-            <label>Phone:</label><br>
-            <input name="phone"><br><br>
-
-            <label>Description:</label><br>
-            <textarea name="description"></textarea><br><br>
-
-            <button type="submit">Create Reservation</button>
-        </form>
-    `);
+    const filePath = path.join(__dirname, "../views/newBike.html");
+    console.log("=== LOADING FORM FROM FILE ===", filePath);
+    res.sendFile(filePath);
 };
 
 /* -------------------- CREATE -------------------- */
