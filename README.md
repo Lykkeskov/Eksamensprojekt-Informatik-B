@@ -12,4 +12,4 @@ Brug det her til logge ind:
 ## Opgavefordeling ud fra trelags modellen - rolleoversigt
 - Frontend, UI/UX: Tobias
 - Backend, API: Emre
-- Database, sikkerhed, networking, scrummaster: Halfdan
+- Database, sikkerhed, hosting, scrummaster: Halfdan
